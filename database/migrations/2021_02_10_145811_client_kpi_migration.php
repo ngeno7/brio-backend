@@ -20,8 +20,10 @@ class ClientKpiMigration extends Migration
             $table->unsignedBigInteger('kpi_item_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('global_kpi_id')->references('id')->on('global_kpis')->onDelete('set null');
-            $table->foreign('kpi_item_id')->references('id')->on('kpi_items')->onDelete('set null');
+            $table->foreign('global_kpi_id')->references('id')
+                ->on('global_kpis')->onDelete('set null');
+            $table->foreign('kpi_item_id')->references('id')
+                ->on('kpi_items')->onDelete('set null');
         });
     }
 

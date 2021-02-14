@@ -2,6 +2,9 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use App\Http\Controllers\GlobalKPIController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -16,3 +19,19 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->get('/global-kpis', 'GlobalKPIController@index');
+$router->post('/global-kpis', 'GlobalKPIController@store');
+$router->put('/global-kpis/{id}', 'GlobalKPIController@update');
+
+$router->get('/kpi-items/{slug}', 'KPIItemController@index');
+$router->post('/kpi-items', 'KPIItemController@store');
+$router->put('/kpi-items/{slug}', 'KPIItemController@update');
+
+$router->get('/clients', 'ClientController@index');
+$router->post('/clients', 'ClientController@store');
+$router->post('/clients/{slug}', 'ClientController@update');
+
+$router->get('/client-kpis-all/{client}', 'ClientKPIController@index');
+$router->get('/client-kpis/{client}/{kpi}', 'ClientKPIController@clientKPI');
+$router->post('/client-kpis/{clientSlug}/{kpiSlug}', 'ClientKPIController@store');

@@ -19,6 +19,8 @@ class GlobalKpiMigration extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->boolean('active')->default(true);
+            $table->boolean('system')->default(false);
+            $table->string('file_path')->nullable();
             $table->timestamps();
          });
     }

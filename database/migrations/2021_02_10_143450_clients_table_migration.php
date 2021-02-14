@@ -15,10 +15,12 @@ class ClientsTableMigration extends Migration
     {
         Schema::create('clients', function(Blueprint $table) {
             $table->id();
+            $table->string('slug');
             $table->string('email');
             $table->string('name');
             $table->string('number_of_employees')->default(0);
-            $table->text('logo');
+            $table->longText('logo')->nullable();
+            $table->decimal('score')->default(0);
             $table->timestamps();
         });
     }

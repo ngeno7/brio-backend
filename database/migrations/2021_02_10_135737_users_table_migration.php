@@ -21,6 +21,7 @@ class UsersTableMigration extends Migration
             $table->string('department')->nullable();
             $table->string('email')->unique();
             $table->string('password')->nullable();
+            $table->string('token')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
         });
