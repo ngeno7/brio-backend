@@ -11,9 +11,21 @@ class GlobalKPIController extends Controller
     public function index()
     {
   
-        return response()->json(GlobalKpi::with(['kpiItems'])->get([
-            'name', 'slug', 'id', 'file_path', 'kpi_items'
+        return response()->json(GlobalKpi::get([
+            'name', 'slug', 'id', 'file_path', 'system'
         ]));
+    }
+
+    public function single($slug) 
+    {
+        if(!$gKPI = GlobalKpi::where('slug',$slug)->with('kpiItems')->first([
+            'id', 'slug', 'name', 'file_path', 'description'
+        ])) {
+
+            return response()->json(['message' => 'Global KPI unavailable'], 400);
+        }
+
+        return response()->json($gKPI);
     }
 
     public function store(Request $request)
@@ -22,6 +34,8 @@ class GlobalKPIController extends Controller
         $this->validate($request,[
             'name' => 'required|unique:global_kpis,name',
         ]);
+
+        $name = '';
 
         if($request->hasFile('file')) {
             $this->validate($request,[ 'file' => 'image',]);

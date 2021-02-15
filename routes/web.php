@@ -21,6 +21,7 @@ $router->get('/', function () use ($router) {
 });
 
 $router->get('/global-kpis', 'GlobalKPIController@index');
+$router->get('/global-kpis/{slug}', 'GlobalKPIController@single');
 $router->post('/global-kpis', 'GlobalKPIController@store');
 $router->put('/global-kpis/{id}', 'GlobalKPIController@update');
 
