@@ -30,6 +30,7 @@ $router->post('/kpi-items', 'KPIItemController@store');
 $router->put('/kpi-items/{slug}', 'KPIItemController@update');
 
 $router->get('/clients', 'ClientController@index');
+$router->get('/clients/{slug}', 'ClientController@single');
 $router->post('/clients', 'ClientController@store');
 $router->post('/clients/{slug}', 'ClientController@update');
 

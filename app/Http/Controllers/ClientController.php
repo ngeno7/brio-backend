@@ -14,6 +14,16 @@ class ClientController extends Controller
         return response()->json(Client::all());
     }
 
+    public function single($slug)
+    {
+        if(!$client = Client::where('slug', $slug)->with('employees')->first()) {
+
+            return response()->json(['message' => 'Client unavailable'], 400);
+        }
+
+        return response()->json($client);
+    }
+
     public function store(Request $request) 
     {
         $this->validate($request, [
