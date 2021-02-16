@@ -33,7 +33,7 @@ class ClientController extends Controller
             $file = base64_encode(file_get_contents($request->file('file')));
         }
 
-        $data = $request->only('email', 'name', 'number_of_employees','employees');
+        $data = $request->only('email', 'name', 'is_client', 'number_of_employees','employees');
         $data['logo'] = $file;
         $data['slug'] = Str::kebab($request->input('name')).'-'.time();
 
