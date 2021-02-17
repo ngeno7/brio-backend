@@ -19,7 +19,7 @@ class UsersTableMigration extends Migration
             $table->string('last_name');
             $table->string('middle_name')->nullable();
             $table->string('department')->nullable();
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('password')->nullable();
             $table->string('token')->nullable();
             $table->boolean('active')->default(true);
