@@ -21,6 +21,20 @@ class ClientKPIController extends Controller
         return response()->json(ClientKpi::where('client_id', $cl->id)->get());
     }
 
+    public function score($client) 
+    {
+        if(!$cl = Client::where('slug', $client)->select('id')->first()) {
+
+            return response()->json(['message' => 'client unavailable in our records.'],400);
+        }
+
+        $score = GlobalKpi::with([ 'kpiItems', 'clientKpiItems' => function($query) use($cl) {
+            $query->where('client_id', $cl->id);
+        }])->get();
+
+        return response()->json($score);
+    }
+
     public function clientKPI($client, $kpi)
     {
 

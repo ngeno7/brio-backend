@@ -20,4 +20,10 @@ class GlobalKpi extends Model
 
         return $this->hasMany(KpiItem::class, 'global_kpi_id');
     }
+
+    public function clientKpiItems()
+    {
+
+        return $this->hasMany(ClientKpi::class, 'global_kpi_id');
+    }
 }

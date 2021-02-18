@@ -37,3 +37,4 @@ $router->post('/clients/{slug}', 'ClientController@update');
 $router->get('/client-kpis-all/{client}', 'ClientKPIController@index');
 $router->get('/client-kpis/{client}/{kpi}', 'ClientKPIController@clientKPI');
 $router->post('/client-kpis/{clientSlug}/{kpiSlug}', 'ClientKPIController@store');
+$router->get('/client-kpis-score/{client}', 'ClientKPIController@score');

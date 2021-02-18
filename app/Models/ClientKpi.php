@@ -14,4 +14,6 @@ class ClientKpi extends Model
     protected $fillable = [
         'client_id', 'global_kpi_id', 'kpi_item_id',
     ];
+
+    
 }
