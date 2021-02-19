@@ -42,6 +42,12 @@ class GlobalKpisTableSeeder extends Seeder
                 'system'=>true,
             ],
             [
+                'slug' => Str::kebab('Wellness'),
+                'name' => 'Wellness',
+                'created_at' => Carbon::now(),
+                'system'=>true,
+            ],
+            [
                 'slug' => Str::kebab('Advocacy'),
                 'name' => 'Advocacy',
                 'created_at' => Carbon::now(),
