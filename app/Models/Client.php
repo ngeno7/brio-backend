@@ -12,7 +12,13 @@ class Client extends Model
      * @var array
     */
     protected $fillable = [
-        'slug', 'is_client', 'email', 'name', 'number_of_employees', 'logo',
+        'slug', 'is_client', 'email', 'name', 
+        'number_of_employees', 'logo', 'password', 'verified',
+        'token',
+    ];
+
+    protected $hidden = [
+        'password', 'token',
     ];
 
     public function employees() 

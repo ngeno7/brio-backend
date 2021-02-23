@@ -20,21 +20,33 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/global-kpis', 'GlobalKPIController@index');
-$router->get('/global-kpis/{slug}', 'GlobalKPIController@single');
-$router->post('/global-kpis', 'GlobalKPIController@store');
-$router->put('/global-kpis/{id}', 'GlobalKPIController@update');
+$router->post('/client-login', 'UserController@logInClient');
+$router->post('/user-login', 'UserController@logInUser');
 
-$router->get('/kpi-items/{slug}', 'KPIItemController@index');
-$router->post('/kpi-items', 'KPIItemController@store');
-$router->put('/kpi-items/{slug}', 'KPIItemController@update');
+$router->group(['middleware' => 'auth'], function() use($router) {
 
-$router->get('/clients', 'ClientController@index');
-$router->get('/clients/{slug}', 'ClientController@single');
-$router->post('/clients', 'ClientController@store');
-$router->post('/clients/{slug}', 'ClientController@update');
+    $router->get('/global-kpis', 'GlobalKPIController@index');
+    $router->get('/global-kpis/{slug}', 'GlobalKPIController@single');
+    $router->post('/global-kpis', 'GlobalKPIController@store');
+    $router->put('/global-kpis/{id}', 'GlobalKPIController@update');
 
-$router->get('/client-kpis-all/{client}', 'ClientKPIController@index');
-$router->get('/client-kpis/{client}/{kpi}', 'ClientKPIController@clientKPI');
-$router->post('/client-kpis/{clientSlug}/{kpiSlug}', 'ClientKPIController@store');
-$router->get('/client-kpis-score/{client}', 'ClientKPIController@score');
+    $router->get('/kpi-items/{slug}', 'KPIItemController@index');
+    $router->post('/kpi-items', 'KPIItemController@store');
+    $router->put('/kpi-items/{slug}', 'KPIItemController@update');
+
+    $router->get('/clients', 'ClientController@index');
+    $router->get('/clients-recent', 'ClientController@recentClients');
+    $router->get('/clients/{slug}', 'ClientController@single');
+    $router->post('/clients', 'ClientController@store');
+    $router->post('/clients/{slug}', 'ClientController@update');
+
+    $router->get('/client-kpis-all/{client}', 'ClientKPIController@index');
+    $router->get('/client-kpis/{client}/{kpi}', 'ClientKPIController@clientKPI');
+    $router->post('/client-kpis/{clientSlug}/{kpiSlug}', 'ClientKPIController@store');
+    $router->get('/client-kpis-score/{client}', 'ClientKPIController@score');
+});
+
+$router->group(['middleware' => 'client_auth'], function() use($router) {
+    $router->get('/client-details', 'ClientPortalController@profile');
+    $router->get('/client-score', 'ClientPortalController@scoreDetails');
+});

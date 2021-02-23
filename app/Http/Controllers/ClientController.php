@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use IlluminateAgnostic\Str\Support\Str;
 
 class ClientController extends Controller
@@ -12,6 +14,11 @@ class ClientController extends Controller
     public function index() 
     {
         return response()->json(Client::all());
+    }
+
+    public function recentClients() 
+    {
+        return response()->json(Client::latest()->take(4)->get(['slug', 'name', 'logo']));
     }
 
     public function single($slug)
@@ -46,6 +53,8 @@ class ClientController extends Controller
         $data = $request->only('email', 'name', 'is_client', 'number_of_employees','employees');
         $data['logo'] = $file;
         $data['slug'] = Str::kebab($request->input('name')).'-'.time();
+        // $data['password'] = Hash::make(Str::random(4));
+        $data['password'] = Hash::make('123456');
 
         $client = DB::transaction(function() use($data) {
 
