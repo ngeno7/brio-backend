@@ -26,7 +26,8 @@ $router->post('/user-login', 'UserController@logInUser');
 $router->group(['middleware' => 'auth'], function() use($router) {
 
     $router->get('/global-kpis', 'GlobalKPIController@index');
-    $router->get('/global-kpis/{slug}', 'GlobalKPIController@single');
+    $router->get('/global-kpis/{slug}', 'GlobalKPIController@show');
+    $router->get('/global-kpis/{kpi}/{clientSlug}', 'GlobalKPIController@single');
     $router->post('/global-kpis', 'GlobalKPIController@store');
     $router->put('/global-kpis/{id}', 'GlobalKPIController@update');
 
@@ -44,9 +45,12 @@ $router->group(['middleware' => 'auth'], function() use($router) {
     $router->get('/client-kpis/{client}/{kpi}', 'ClientKPIController@clientKPI');
     $router->post('/client-kpis/{clientSlug}/{kpiSlug}', 'ClientKPIController@store');
     $router->get('/client-kpis-score/{client}', 'ClientKPIController@score');
+
+    $router->post('/client-kpi-item-exclusion', 'ClientKPIItemExclusionController@store');
 });
 
 $router->group(['middleware' => 'client_auth'], function() use($router) {
     $router->get('/client-details', 'ClientPortalController@profile');
     $router->get('/client-score', 'ClientPortalController@scoreDetails');
+    $router->get('/client-kpi-score/{slug}', 'ClientPortalController@kpiScoreDetails');
 });

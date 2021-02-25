@@ -39,22 +39,19 @@ class UserController extends Controller
     {
 
         $this->validate($request, [
-            'email' => 'required|email:',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if(!$user = DB::table('clients')->where('email', $request->input('email')->first())) {
+        if(!$user = DB::table('clients')->where('email', $request->input('email'))->first()) {
 
             return response()->json(['message' => 'Invalid Credentials'], 400);
         }
 
         if(Hash::check($request->input('password'), $user->password)) {
-            $token = Str::random(80);
-
-            Client::find($user->id)->update(['token' => $token]);
 
             return response()->json([
-                'message' => 'Log in successfull', 'token' => $token], 200);
+                'message' => 'Log in successfull', 'token' => $user->token], 200);
         }
 
         return response()->json(['message' => 'Invalid Credentials'], 400);

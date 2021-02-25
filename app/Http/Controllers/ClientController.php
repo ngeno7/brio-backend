@@ -34,7 +34,7 @@ class ClientController extends Controller
     public function store(Request $request) 
     {
         $this->validate($request, [
-            'email' => 'required|email',
+            'email' => 'required|email|unique:clients,email',
             'name' => 'required',
             'number_of_employees' => 'required',
         ]);
@@ -55,6 +55,7 @@ class ClientController extends Controller
         $data['slug'] = Str::kebab($request->input('name')).'-'.time();
         // $data['password'] = Hash::make(Str::random(4));
         $data['password'] = Hash::make('123456');
+        $data['token'] = Str::random(80);
 
         $client = DB::transaction(function() use($data) {
 
