@@ -53,14 +53,14 @@ class KPIItemController extends Controller
         return response()->json(['message' => 'KPI item updated successfully'], 200);
     }
 
-    public function destroy($id) 
+    public function destroy($slug) 
     {
-        if(!$kpiItem = KpiItem::find($id)){
+        if(!$kpiItem = KpiItem::where('slug',$slug)->first()){
 
             return response()->json(['message' => 'KPI item unavailable'], 400);
         }
 
-        $kpiItem->update(['active' => false]);
+        $kpiItem->delete();
 
         return response()->json(['message' => 'KPI item deleted successfully'], 200);
     }

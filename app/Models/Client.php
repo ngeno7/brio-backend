@@ -14,11 +14,11 @@ class Client extends Model
     protected $fillable = [
         'slug', 'is_client', 'email', 'name', 
         'number_of_employees', 'logo', 'password', 'verified',
-        'token',
+        'token', 'verification_code'
     ];
 
     protected $hidden = [
-        'password', 'token',
+        'password', 'token', 'verification_code',
     ];
 
     public function employees() 

@@ -12,8 +12,6 @@ class ClientKpi extends Model
      * @var array
     */
     protected $fillable = [
-        'client_id', 'global_kpi_id', 'kpi_item_id',
+        'client_id', 'global_client_kpi_id', 'client_kpi_item_id',
     ];
-
-    
 }

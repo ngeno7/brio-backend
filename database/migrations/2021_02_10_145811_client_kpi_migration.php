@@ -16,14 +16,14 @@ class ClientKpiMigration extends Migration
         Schema::create('client_kpis', function(Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('client_id');
-            $table->unsignedBigInteger('global_kpi_id')->nullable();
-            $table->unsignedBigInteger('kpi_item_id')->nullable();
+            $table->unsignedBigInteger('global_client_kpi_id')->nullable();
+            $table->unsignedBigInteger('client_kpi_item_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('global_kpi_id')->references('id')
-                ->on('global_kpis')->onDelete('set null');
-            $table->foreign('kpi_item_id')->references('id')
-                ->on('kpi_items')->onDelete('set null');
+            $table->foreign('global_client_kpi_id')->references('id')
+                ->on('global_client_kpis')->onDelete('set null');
+            $table->foreign('client_kpi_item_id')->references('id')
+                ->on('client_kpi_items')->onDelete('set null');
         });
     }
 

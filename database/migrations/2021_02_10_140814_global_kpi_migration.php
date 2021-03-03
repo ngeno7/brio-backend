@@ -29,7 +29,7 @@ class GlobalKpiMigration extends Migration
      * Reverse the migrations.
      *
      * @return void
-     */
+    */
     public function down()
     {
         Schema::dropIfExists('global_kpis');

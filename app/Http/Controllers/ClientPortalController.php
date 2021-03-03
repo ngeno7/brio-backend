@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\ClientKPIItemExclusion;
+use App\Models\GlobalClientKpi;
 use App\Models\GlobalKpi;
 use Illuminate\Http\Request;
 
@@ -27,16 +28,7 @@ class ClientPortalController extends Controller
             return response()->json(['message' => 'client unavailable in our records.'],400);
         }
 
-        $excludedKPIItems = ClientKPIItemExclusion::where('client_id', $cl->id)->get(['kpi_item_id'])
-            ->map(function($item) {
-                return $item->kpi_item_id;
-            });
-
-        $score = GlobalKpi::with([ 'kpiItems' => function($query) use($excludedKPIItems) {
-            $query->whereNotIn('id', $excludedKPIItems);
-        }, 'clientKpiItems' => function($query) use($cl) {
-            $query->where('client_id', $cl->id);
-        }])->get();
+        $score = GlobalClientKpi::where('client_id', $cl->id)->with([ 'kpiItems', 'clientKpiItems'])->get();
 
         return response()->json($score);
     }
@@ -48,16 +40,7 @@ class ClientPortalController extends Controller
             return response()->json(['message' => 'client unavailable in our records.'],400);
         }
 
-        $excludedKPIItems = ClientKPIItemExclusion::where('client_id', $cl->id)->get(['kpi_item_id'])
-            ->map(function($item) {
-                return $item->kpi_item_id;
-            });
-
-        $score = GlobalKpi::where('slug', $slug)->with([ 'kpiItems' => function($query) use($excludedKPIItems) {
-            $query->whereNotIn('id', $excludedKPIItems);
-        }, 'clientKpiItems' => function($query) use($cl) {
-            $query->where('client_id', $cl->id);
-        }])->first();
+        $score = GlobalClientKpi::where('client_id', $cl->id)->where('slug', $slug)->with([ 'kpiItems', 'clientKpiItems'])->first();
 
         return response()->json($score);
     }
