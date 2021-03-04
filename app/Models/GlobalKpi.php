@@ -12,7 +12,7 @@ class GlobalKpi extends Model
      * @var array
     */
     protected $fillable = [
-        'slug', 'name', 'description', 'active', 'file_path',
+        'slug', 'name', 'description', 'system', 'active', 'file_path', 'icon',
     ];
 
     public function kpiItems() 

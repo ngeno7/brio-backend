@@ -69,6 +69,7 @@ $router->group(['middleware' => 'auth'], function() use($router) {
 });
 
 $router->group(['middleware' => 'client_auth'], function() use($router) {
+    $router->post('/client-rating/{slug}', 'ClientController@updateRating');
     $router->get('/client-details', 'ClientPortalController@profile');
     $router->get('/client-score', 'ClientPortalController@scoreDetails');
     $router->get('/client-kpi-score/{slug}', 'ClientPortalController@kpiScoreDetails');

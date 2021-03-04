@@ -14,7 +14,7 @@ class Client extends Model
     protected $fillable = [
         'slug', 'is_client', 'email', 'name', 
         'number_of_employees', 'logo', 'password', 'verified',
-        'token', 'verification_code'
+        'token', 'verification_code', 'score', 'email_2'
     ];
 
     protected $hidden = [

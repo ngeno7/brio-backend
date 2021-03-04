@@ -12,8 +12,8 @@ class GlobalClientKpi extends Model
      * @var array
     */
     protected $fillable = [
-        'slug', 'client_id', 'name', 
-        'description', 'active', 'file_path', 'score',
+        'slug', 'client_id', 'name', 'system',
+        'description', 'active', 'file_path', 'score', 'icon'
     ];
 
     public function kpiItems() 

@@ -52,7 +52,7 @@ class ClientController extends Controller
             $file = base64_encode(file_get_contents($request->file('file')));
         }
 
-        $data = $request->only('email', 'name', 'is_client', 'number_of_employees','employees');
+        $data = $request->only('email', 'name', 'email_2', 'is_client', 'number_of_employees','employees');
         $data['logo'] = $file;
         $data['slug'] = Str::kebab($request->input('name')).'-'.time();
         $password = Str::random(5);
@@ -106,7 +106,7 @@ class ClientController extends Controller
             $file = base64_encode(file_get_contents($request->file('file')));
         }
 
-        $data = $request->only('email', 'name', 'number_of_employees','employees');
+        $data = $request->only('email', 'name', 'email_2', 'number_of_employees','employees');
         $data['logo'] = $file;
 
         $cl = DB::transaction(function() use($data, $client) {
@@ -168,5 +168,17 @@ class ClientController extends Controller
         }
 
         return response()->json(['message' => 'Invalid information'], 400);
+    }
+
+    public function updateRating(Request $request, $slug) 
+    {
+        if(!$client=Client::where('slug', $slug)->first()) {
+
+            return response()->json(['message' => 'Forbidden: Client Unavailable'], 400);
+        }
+
+        $client->update(['score' => $request->input('score')]);
+
+        return response()->json(['message' => 'Client rating saved'], 201);
     }
 }

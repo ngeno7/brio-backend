@@ -24,12 +24,9 @@ class UserController extends Controller
         }
 
         if(Hash::check($request->input('password'), $user->password)) {
-            $token = Str::random(80);
-
-            User::find($user->id)->update(['token' => $token]);
 
             return response()->json([
-                'message' => 'Log in successfull', 'token' => $token], 200);
+                'message' => 'Log in successfull', 'token' => $user->token], 200);
         }
 
         return response()->json(['message' => 'Invalid Credentials'], 400);

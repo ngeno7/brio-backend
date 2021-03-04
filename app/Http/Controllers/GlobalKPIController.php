@@ -61,20 +61,18 @@ class GlobalKPIController extends Controller
             'name' => 'required|unique:global_kpis,name',
         ]);
 
-        $name = '';
+        $file = "";
 
         if($request->hasFile('file')) {
-            $this->validate($request,[ 'file' => 'image',]);
-            $image = $request->file('file');
-            $name = Str::kebab($request->input('name')).'.'.$image->getClientOriginalExtension();
-            $destinationPath = storage_path('/app/images');
-            $request->file('file')->move($destinationPath, $name);
+
+            $this->validate($request, ['file' => 'image',]);
+            $file = base64_encode(file_get_contents($request->file('file')));
         }
 
         $data = [
             'name' => $request->input('name'),
-            'file_path'=> $name,
-            'slug' => Str::kebab($request->input('name')),
+            'icon' => $file,
+            'slug' => Str::kebab($request->input('name')).'-'.time(),
         ];
 
         GlobalKpi::create($data);
@@ -92,20 +90,17 @@ class GlobalKPIController extends Controller
             'name' => 'required|unique:global_kpis,name,'.$id,
         ]);
 
-        $name = $request->input('file_path');
+        $file = $gKPI->icon;
 
         if($request->hasFile('file')) {
-            $this->validate($request,[ 'file' => 'image',]);
-            $image = $request->file('file');
-            $name = Str::kebab($request->input('name')).'.'.$image->getClientOriginalExtension();
-            $destinationPath = storage_path('/app/images');
-            $request->file('file')->move($destinationPath, $name);
+
+            $this->validate($request, ['file' => 'image',]);
+            $file = base64_encode(file_get_contents($request->file('file')));
         }
 
         $data = [
             'name' => $request->input('name'),
-            'file_path'=> $name,
-            'slug' => Str::kebab($request->input('name')),
+            'icon'=> $file,
         ];
 
         $gKPI->update($data);
