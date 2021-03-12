@@ -72,7 +72,7 @@ class GlobalKPIController extends Controller
         $data = [
             'name' => $request->input('name'),
             'icon' => $file,
-            'slug' => Str::kebab($request->input('name')).'-'.time(),
+            'slug' => Str::kebab($request->input('name')),
         ];
 
         GlobalKpi::create($data);

@@ -7,7 +7,6 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use IlluminateAgnostic\Str\Support\Str;
 
@@ -75,7 +74,6 @@ class ClientController extends Controller
         $creds = ['email' => $data['email'], 'password' => $password];
         Mail::send('mail', $creds, function($message) use($data) {
             $message->to($data['email'])->subject('Brio Account');
-            $message->from('brioanalysis@gmail.com', 'Brio Team');
         });
 
         return response()->json(['message' =>'Client Saved successfully', 'data' => $client]);
@@ -135,7 +133,6 @@ class ClientController extends Controller
 
         Mail::send('verification-code', ['code' => $code], function($message) use($request) {
             $message->to($request->input('email'))->subject('Brio Reset Password');
-            $message->from('brioanalysis@gmail.com', 'Brio Team');
         });
 
         return response()->json(['message' => 'Verification code sent to email'], 200);
@@ -161,7 +158,6 @@ class ClientController extends Controller
  
             Mail::send('mail', $request->all(), function($message) use($request) {
                 $message->to($request->input('email'))->subject('Brio Account');
-                $message->from('info@brio.com', 'Brio Team');
             });
 
             return response()->json(['message' => 'Password updated, Log in to your account '], 200);

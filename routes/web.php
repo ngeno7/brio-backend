@@ -3,6 +3,7 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 use App\Http\Controllers\GlobalKPIController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 /*
@@ -16,8 +17,8 @@ use Illuminate\Support\Facades\Mail;
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->get('/', function (Request $request) use ($router) {
+    return [$router->app->version(), $request->bearerToken()];
 });
 
 $router->post('/client-login', 'UserController@logInClient');
@@ -30,7 +31,6 @@ $router->get('/test-mail', function() {
     $data = ['email' => 'Ngeno', 'password' => '123456'];
     Mail::send('mail', $data, function($message) {
         $message->to('hillaryng14@gmail.com')->subject('Brio Account');
-        $message->from('info@brio.com', 'Brio Team');
     });
 });
 
