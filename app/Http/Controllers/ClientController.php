@@ -17,9 +17,17 @@ class ClientController extends Controller
         return response()->json(Client::all());
     }
 
-    public function recentClients() 
+    public function recentClients(Request $request) 
     {
-        return response()->json(Client::latest()->take(4)->get(['slug', 'name', 'logo']));
+        if(!$request->input('search')) {
+
+            return response()->json(Client::latest()->take(4)->get(['slug', 'name', 'logo']));
+        }
+
+        $clients = Client::where('name', 'like', '%'.$request->input('search').'%' )
+            ->latest()->take(4)->get(['slug', 'name', 'logo']);
+
+        return response()->json($clients);
     }
 
     public function single($slug)

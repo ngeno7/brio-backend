@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class GlobalClientKpi extends Model
@@ -26,5 +27,13 @@ class GlobalClientKpi extends Model
     {
 
         return $this->hasMany(ClientKpi::class, 'global_client_kpi_id');
+    }
+
+    protected static function booted()
+    {
+
+        static::addGlobalScope('inActive', function (Builder $builder) {
+            $builder->where('active', true);
+        });
     }
 }

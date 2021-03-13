@@ -60,4 +60,21 @@ class GlobalClientKPIController extends Controller
 
         return response()->json(['message' => 'Client KPI Scores saved']);
     }
+
+    public function destroy($clientSlug, $kpiSlug)
+    {
+        if(!$client = Client::where('slug', $clientSlug)->select()->first()){
+
+            return response()->json(['message' => 'Client Unavailable'], 400);
+        }
+
+        if(!$globalKPI = GlobalClientKpi::where('slug', $kpiSlug)->where('client_id', $client->id)->first()) {
+
+            return response()->json(['message' => 'KPI Unavailable'], 400);
+        }
+
+        $globalKPI->update(['active' => false]);
+
+        return response()->json(['message' => 'KPI removed successfully'], 200);
+    }
 }

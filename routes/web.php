@@ -56,6 +56,8 @@ $router->group(['middleware' => 'auth'], function() use($router) {
     $router->get('/global-client-kpis/{clientSlug}', 'GlobalClientKPIController@index');
     $router->get('/global-client-kpis/{clientSlug}/{kpiSlug}', 'GlobalClientKPIController@kpiItems');
     $router->post('/global-client-kpis/{clientSlug}', 'GlobalClientKPIController@storeScore');
+    $router->post('/global-client-kpis/{clientSlug}', 'GlobalClientKPIController@storeScore');
+    $router->delete('/global-client-kpis/{clientSlug}/{kpiSlug}', 'GlobalClientKPIController@destroy');
 
     $router->get('/client-kpis-all/{client}', 'ClientKPIController@index');
     $router->get('/client-kpis/{client}/{kpi}', 'ClientKPIController@clientKPI');
