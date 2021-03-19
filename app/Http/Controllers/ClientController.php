@@ -129,6 +129,19 @@ class ClientController extends Controller
         return response()->json(['message' =>'Client Updated successfully', 'data' => $cl,],200);
     }
 
+    public function updateDisplayTexts(Request $request, $slug)
+    {
+        if(!$client=Client::where('slug', $slug)->first()) {
+
+            return response()->json(['message' => 'Client Unavailable'], 400);
+        }
+        $data = $request->only('welcome_text', 'score_text');
+
+        $client->update($data);
+
+        return response()->json(['message' =>'Client Updated successfully'],200);
+    }
+
     public function resetPasswordInit(Request $request) 
     {
         $this->validate($request, [

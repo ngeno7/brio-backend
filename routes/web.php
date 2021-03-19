@@ -52,18 +52,18 @@ $router->group(['middleware' => 'auth'], function() use($router) {
     $router->get('/clients/{slug}', 'ClientController@single');
     $router->post('/clients', 'ClientController@store');
     $router->post('/clients/{slug}', 'ClientController@update');
+    $router->put('/clients/display-texts/{slug}', 'ClientController@updateDisplayTexts');
 
     $router->get('/global-client-kpis/{clientSlug}', 'GlobalClientKPIController@index');
     $router->get('/global-client-kpis/{clientSlug}/{kpiSlug}', 'GlobalClientKPIController@kpiItems');
     $router->post('/global-client-kpis/{clientSlug}', 'GlobalClientKPIController@storeScore');
-    $router->post('/global-client-kpis/{clientSlug}', 'GlobalClientKPIController@storeScore');
     $router->delete('/global-client-kpis/{clientSlug}/{kpiSlug}', 'GlobalClientKPIController@destroy');
+    $router->put('/global-client-kpis/display-texts/{clientSlug}', 'GlobalClientKPIController@updateDisplayText');
 
     $router->get('/client-kpis-all/{client}', 'ClientKPIController@index');
     $router->get('/client-kpis/{client}/{kpi}', 'ClientKPIController@clientKPI');
     $router->post('/client-kpis/{clientSlug}/{kpiSlug}', 'ClientKPIController@store');
     $router->get('/client-kpis-score/{client}', 'ClientKPIController@score');
-    
 
     $router->post('/client-kpi-item/{kpiSlug}/{clientSlug}', 'ClientKPIItemController@store');
     $router->delete('/client-kpi-item/{id}', 'ClientKPIItemController@destroy');

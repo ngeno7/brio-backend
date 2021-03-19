@@ -12,13 +12,18 @@ class Client extends Model
      * @var array
     */
     protected $fillable = [
-        'slug', 'is_client', 'email', 'name', 
-        'number_of_employees', 'logo', 'password', 'verified',
-        'token', 'verification_code', 'score', 'email_2'
+        'slug', 'is_client', 'email', 'name', 'number_of_employees', 
+        'logo', 'password', 'verified', 'token', 'verification_code',
+        'score', 'email_2', 'overridden', 'average_kpi_score',
+        'welcome_text', 'score_text',
     ];
 
     protected $hidden = [
         'password', 'token', 'verification_code',
+    ];
+
+    protected $casts = [
+        'overridden' => 'boolean',
     ];
 
     public function employees() 

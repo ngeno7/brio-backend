@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\GlobalClientKpi;
+use App\Models\GlobalKpi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GlobalClientKPIController extends Controller
 {
@@ -47,18 +49,46 @@ class GlobalClientKPIController extends Controller
             return response()->json(['message' => 'No KPis entered'], 400);
         }
 
-        if(!$client=Client::where('slug', $clientSlug)->select('id')->first()) {
+        if(!$client=Client::where('slug', $clientSlug)->first()) {
 
             return response()->json(['message' => 'Forbidden: Client Not Available'], 400);
         }
 
-        foreach ($request->input('kpis') as $kpi) {
-            GlobalClientKpi::where('client_id', $client->id)->where('id', $kpi['id'])->update(
-                ['score' => $kpi['score'],]
-            );
-        }
+        DB::transaction(function() use($request, $client) {
+            $client->update(['overridden' => true, 'average_kpi_score' => $request->input('average_kpi_score')]);
+
+            foreach ($request->input('kpis') as $kpi) {
+                GlobalClientKpi::where('client_id', $client->id)->where('id', $kpi['id'])->update(
+                    ['score' => $kpi['score'],]
+                );
+            }
+        });
+
+        
 
         return response()->json(['message' => 'Client KPI Scores saved']);
+    }
+
+    public function updateDisplayText(Request $request, $clientSlug)
+    {
+        if(!$client=Client::where('slug', $clientSlug)->first()) {
+
+            return response()->json(['message' => 'Client Unavailable'], 400);
+        }
+
+        DB::transaction(function() use($request, $client) {
+            $data = $request->only('client');
+            $client->update($data);
+            foreach ($request->input('kpis') as $kpi) {
+                GlobalClientKpi::find($kpi['id'])->update(
+                    [
+                        'welcome_message' => $kpi['welcome_message'], 
+                        'score_message' => $kpi['score_message']
+                    ]);
+            }
+        });
+
+        return response()->json(['message' =>'Display messages Updated successfully'],200);
     }
 
     public function destroy($clientSlug, $kpiSlug)
