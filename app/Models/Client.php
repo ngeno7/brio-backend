@@ -15,7 +15,7 @@ class Client extends Model
         'slug', 'is_client', 'email', 'name', 'number_of_employees', 
         'logo', 'password', 'verified', 'token', 'verification_code',
         'score', 'email_2', 'overridden', 'average_kpi_score',
-        'welcome_text', 'score_text',
+        'welcome_text', 'score_text', 'user_id',
     ];
 
     protected $hidden = [

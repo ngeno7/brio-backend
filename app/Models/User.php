@@ -20,7 +20,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $fillable = [
         'first_name', 'last_name', 'middle_name', 'department', 'email',
-        'password', 'token',
+        'password', 'token', 'is_admin', 'active',
     ];
 
     /**
@@ -31,4 +31,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password', 'token',
     ];
+    protected $casts = [
+        'is_admin' => 'boolean',
+    ];
+
+    public function clients() 
+    {
+        return $this->hasMany(Client::class, 'user_id');
+    }
 }

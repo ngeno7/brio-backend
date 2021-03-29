@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\GenerateClientKPI;
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -21,10 +22,13 @@ class ClientController extends Controller
     {
         if(!$request->input('search')) {
 
-            return response()->json(Client::latest()->take(4)->get(['slug', 'name', 'logo']));
+            return response()->json(Client::latest()
+                // ->where('user_id', Auth::user()->id)
+                ->take(4)->get(['slug', 'name', 'logo']));
         }
 
         $clients = Client::where('name', 'like', '%'.$request->input('search').'%' )
+            // ->where('user_id', Auth::user()->id)
             ->latest()->take(4)->get(['slug', 'name', 'logo']);
 
         return response()->json($clients);
@@ -62,10 +66,11 @@ class ClientController extends Controller
         $data = $request->only('email', 'name', 'email_2', 'is_client', 'number_of_employees','employees');
         $data['logo'] = $file;
         $data['slug'] = Str::kebab($request->input('name')).'-'.time();
-        $password = Str::random(5);
+        $password = rand(1000, 99999);
         $data['password'] = Hash::make($password);
         // $data['password'] = Hash::make('123456');
         $data['token'] = Str::random(80);
+        $data['user_id'] = Auth::user()->id;
 
         $client = DB::transaction(function() use($data) {
 

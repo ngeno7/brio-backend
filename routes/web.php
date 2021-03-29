@@ -4,6 +4,7 @@
 
 use App\Http\Controllers\GlobalKPIController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 /*
@@ -35,6 +36,14 @@ $router->get('/test-mail', function() {
 });
 
 $router->group(['middleware' => 'auth'], function() use($router) {
+    $router->get('user', function() {
+        return Auth::user();
+    });
+    $router->get('users', 'UserController@index');
+    $router->post('users', 'UserController@create');
+    $router->post('users/{id}', 'UserController@update');
+    $router->delete('users/{id}', 'UserController@destroy');
+    $router->get('users/clients/{id}', 'UserController@clients');
 
     $router->get('/global-kpis', 'GlobalKPIController@index');
     $router->get('/global-kpis/{slug}', 'GlobalKPIController@show');
