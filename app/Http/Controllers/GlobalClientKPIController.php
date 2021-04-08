@@ -64,8 +64,6 @@ class GlobalClientKPIController extends Controller
             }
         });
 
-        
-
         return response()->json(['message' => 'Client KPI Scores saved']);
     }
 
@@ -78,7 +76,7 @@ class GlobalClientKPIController extends Controller
 
         DB::transaction(function() use($request, $client) {
             $data = $request->only('client');
-            $client->update($data);
+            $client->update($data['client']);
             foreach ($request->input('kpis') as $kpi) {
                 GlobalClientKpi::find($kpi['id'])->update(
                     [
