@@ -21,9 +21,11 @@ class ClientKpiMigration extends Migration
             $table->timestamps();
 
             $table->foreign('global_client_kpi_id')->references('id')
-                ->on('global_client_kpis')->onDelete('set null');
+                ->on('global_client_kpis')->onDelete('cascade');
             $table->foreign('client_kpi_item_id')->references('id')
-                ->on('client_kpi_items')->onDelete('set null');
+                ->on('client_kpi_items')->onDelete('cascade');
+            $table->foreign('client_id')->references('id')
+                ->on('clients')->onDelete('cascade');
         });
     }
 

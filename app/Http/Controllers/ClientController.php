@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\GenerateClientKPI;
 use App\Models\Client;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -84,9 +85,16 @@ class ClientController extends Controller
                 return $client;
         });
 
+        $admin=User::findOrFail($client->user_id);
+
         $creds = ['email' => $data['email'], 'password' => $password];
-        Mail::send('mail', $creds, function($message) use($data) {
-            $message->to($data['email'])->subject('Brio Account');
+
+        Mail::send('mail', $creds, function($message) use($data, $client, $admin) {
+            $message->to(
+                    $client->is_client ?
+                    $data['email'] :
+                    $admin->email
+                )->subject('Brio Account');
         });
 
         return response()->json(['message' =>'Client Saved successfully', 'data' => $client]);
@@ -153,12 +161,17 @@ class ClientController extends Controller
             'email' => 'required|email|exists:clients,email',
         ]);
 
-        $client = Client::where('email', $request->input('email'))->first();
+        $client = Client::where('email', $request->input('email'))->firstOrFail();
+        $admin = User::findOrFail($client->user_id);
         $code = Str::random(6);
         $client->update(['verification_code' => Hash::make($code)]);
 
-        Mail::send('verification-code', ['code' => $code], function($message) use($request) {
-            $message->to($request->input('email'))->subject('Brio Reset Password');
+        Mail::send('verification-code', ['code' => $code], function($message) use($request, $client, $admin) {
+            $message->to(
+                    $client->is_client ? 
+                    $request->input('email') :
+                    $admin->email
+                )->subject('Brio Reset Password');
         });
 
         return response()->json(['message' => 'Verification code sent to email'], 200);
@@ -172,18 +185,23 @@ class ClientController extends Controller
             'password' => 'required',
         ]);
 
-        $client=DB::table('clients')->where('email', $request->input('email'))->first();
+        $client=Client::where('email', $request->input('email'))->firstOrFail();
 
         if(Hash::check($request->input('verification_code'), $client->verification_code)) {
             $token = Str::random(80);
-            Client::find($client->id)->update([
+            $admin = User::findOrFail($client->user_id);
+            $client->update([
                 'token' => $token, 
                 'password' => Hash::make($request->input('password')),
                 'verification_code' => null,
             ]);
  
-            Mail::send('mail', $request->all(), function($message) use($request) {
-                $message->to($request->input('email'))->subject('Brio Account');
+            Mail::send('mail', $request->all(), function($message) use($request, $client, $admin) {
+                $message->to(
+                        $client->is_client ?
+                        $request->input('email') : 
+                        $admin->email
+                    )->subject('Brio Account');
             });
 
             return response()->json(['message' => 'Password updated, Log in to your account '], 200);
@@ -202,5 +220,17 @@ class ClientController extends Controller
         $client->update(['score' => $request->input('score')]);
 
         return response()->json(['message' => 'Client rating saved'], 201);
+    }
+
+    public function destroy($slug) 
+    {
+        if(!$client=Client::where('slug', $slug)->first()) {
+
+            return response()->json(['message' => 'Forbidden: Client Unavailable'],400);
+        }
+
+        $client->delete();
+
+        return response()->json(['message' => 'Client deleted successfully.'],200);
     }
 }

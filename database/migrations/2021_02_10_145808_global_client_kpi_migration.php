@@ -23,6 +23,9 @@ class GlobalClientKpiMigration extends Migration
             $table->boolean('system')->default(false);
             $table->string('file_path')->nullable();
             $table->timestamps();
+
+            $table->foreign('client_id')->references('id')
+                ->on('clients')->onDelete('cascade');
          });
     }
 
