@@ -30,7 +30,9 @@ class ClientKPIController extends Controller
             return response()->json(['message' => 'Forbidden: client unavailable in our records.'],400);
         }
 
-        $score = GlobalClientKpi::with([ 'kpiItems', 'clientKpiItems' => function($query) {
+        $score = GlobalClientKpi::with([ 'kpiItems' => function($query) {
+            $query->orderBy('position');
+        }, 'clientKpiItems' => function($query) {
             return $query->whereNotNull('client_kpi_item_id');
         }])->where('client_id', $cl->id)->get();
 

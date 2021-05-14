@@ -26,9 +26,11 @@ class ClientPortalController extends Controller
             return response()->json(['message' => 'client unavailable in our records.'],400);
         }
 
-        $score = GlobalClientKpi::where('client_id', $cl->id)->with([ 'kpiItems', 'clientKpiItems' => function($query) {
-            return $query->whereNotNull('client_kpi_item_id');
-        }])->get();
+        $score = GlobalClientKpi::where('client_id', $cl->id)->with([ 'kpiItems' => function($query) {
+                $query->orderBy('position');
+            }, 'clientKpiItems' => function($query) {
+                return $query->whereNotNull('client_kpi_item_id');
+            }])->get();
 
         return response()->json($score);
     }
@@ -41,7 +43,9 @@ class ClientPortalController extends Controller
         }
 
         $score = GlobalClientKpi::where('client_id', $cl->id)->where('slug', $slug)
-            ->with([ 'kpiItems', 'clientKpiItems' => function($query) {
+            ->with([ 'kpiItems' => function($query) {
+                $query->orderBy('position');
+            }, 'clientKpiItems' => function($query) {
                 $query->whereNotNull('client_kpi_item_id');
             }])->first();
 

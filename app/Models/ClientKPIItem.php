@@ -13,7 +13,7 @@ class ClientKpiItem extends Model
      * @var array
      */
     protected $fillable = [
-        'slug', 'name', 'description', 'active', 'global_client_kpi_id',
+        'slug', 'name', 'description', 'active', 'global_client_kpi_id', 'position',
     ];
 
     public function globalClientKPI() 

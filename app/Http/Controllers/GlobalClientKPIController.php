@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\ClientKpiItem;
 use App\Models\GlobalClientKpi;
 use App\Models\GlobalKpi;
 use Illuminate\Http\Request;
@@ -35,7 +36,9 @@ class GlobalClientKPIController extends Controller
         }
 
         if(!$gcKPI=GlobalClientKpi::where('slug', $kpiSlug)->where('client_id', $client->id)->with([
-            'kpiItems', 'clientKpiItems'])->first()) {
+            'kpiItems' => function($query) {
+                $query->orderBy('position');
+            }, 'clientKpiItems'])->first()) {
             return response()->json(['message' => 'Forbidden: Client KPI Unavailable'], 400);
         }
 
@@ -104,5 +107,15 @@ class GlobalClientKPIController extends Controller
         $globalKPI->update(['active' => false]);
 
         return response()->json(['message' => 'KPI removed successfully'], 200);
+    }
+
+    public function updateOrder(Request $request)
+    {
+
+        foreach ($request->input('items') as $key => $item) {
+            ClientKpiItem::find($item)->update(['position' => $key]);
+        }
+
+        return response()->json(['message' => 'Order updated']);
     }
 }
